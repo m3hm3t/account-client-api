@@ -1,15 +1,5 @@
 MOCK_SERVER_ADDRESS=localhost:1080
 MOCK_SERVER_RESET_URL=http://$(MOCK_SERVER_ADDRESS)/mockserver/reset
-swag:
-	swag init -g ./cmd/api/main.go -o ./docs
-
-.PHONY: swag
-
-wire:
-	wire ./internal/wired/wired.go
-
-.PHONY: wire
-
 unit-test:
 	 go test ./internal/... -coverpkg=./internal/...  -covermode=atomic -coverprofile coverage.out; \
  	 go tool cover -func coverage.out | grep total; \
