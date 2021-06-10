@@ -6,9 +6,7 @@ import (
 
 var MockServerURL = "http://localhost:1080/mockserver/expectation"
 
-
 func Setup() {
-
 	client := &http.Client{}
 
 	//Clear MockServer Expectations
@@ -24,7 +22,6 @@ func Setup() {
 }
 
 func Shutdown() {
-
 	client := &http.Client{}
 
 	//Clear MockServer Expectations

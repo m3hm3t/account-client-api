@@ -3,8 +3,8 @@ package test
 import (
 	"bytes"
 	"github.com/m3hm3t/account-client-api/internal/config"
-	"github.com/m3hm3t/account-client-api/internal/pkg/rest/adapter/account/creator"
-	"github.com/m3hm3t/account-client-api/internal/pkg/rest/adapter/account/dto"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/creator"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"net/http"
@@ -56,8 +56,8 @@ func (s *CreateAccountTestSuite) TestShouldCreateAccountWhenMockAPIReturnSuccess
 			Type:           "accounts",
 			OrganisationID: "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",
 			Version:        0,
-			ModifiedOn: "2021-06-10T12:38:04.627Z",
-			CreatedOn: "2021-06-10T12:38:04.627Z",
+			ModifiedOn:     "2021-06-10T12:38:04.627Z",
+			CreatedOn:      "2021-06-10T12:38:04.627Z",
 			Attributes: dto.AttributesResponseDto{
 				Country:                 "GB",
 				BaseCurrency:            "GBP",
@@ -73,7 +73,7 @@ func (s *CreateAccountTestSuite) TestShouldCreateAccountWhenMockAPIReturnSuccess
 		},
 	}
 
-	creatorAdapter := creator.ProvideAccountCreator2()
+	creatorAdapter := creator.ProvideAccountCreator()
 
 	// When
 	err := creatorAdapter.CreateAccount(accountRequest, &actualAccountResponse)
@@ -115,7 +115,7 @@ func (s *CreateAccountTestSuite) TestShouldReturnErrorWhenMockAPIReturnErrorMess
 
 	actualAccountResponse := dto.ResponseDto{}
 
-	creatorAdapter := creator.ProvideAccountCreator2()
+	creatorAdapter := creator.ProvideAccountCreator()
 
 	// When
 	err := creatorAdapter.CreateAccount(accountRequest, &actualAccountResponse)

@@ -3,8 +3,8 @@ package test
 import (
 	"bytes"
 	"github.com/m3hm3t/account-client-api/internal/config"
-	"github.com/m3hm3t/account-client-api/internal/pkg/rest/adapter/account/dto"
-	"github.com/m3hm3t/account-client-api/internal/pkg/rest/adapter/account/fetcher"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetcher"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"net/http"
@@ -19,7 +19,7 @@ func TestFetchAccountTestSuite(t *testing.T) {
 	suite.Run(t, new(FetchAccountTestSuite))
 }
 
-func (s *FetchAccountTestSuite)TestShouldFetchAccountWhenAccountIsCreated() {
+func (s *FetchAccountTestSuite) TestShouldFetchAccountWhenAccountIsCreated() {
 	// GIVEN
 	if mockErr := s.setMockAccountAPIReturnSuccess(); mockErr != nil {
 		s.Error(mockErr)
@@ -35,8 +35,8 @@ func (s *FetchAccountTestSuite)TestShouldFetchAccountWhenAccountIsCreated() {
 			Type:           "accounts",
 			OrganisationID: "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",
 			Version:        0,
-			ModifiedOn: "2021-06-10T12:38:04.627Z",
-			CreatedOn: "2021-06-10T12:38:04.627Z",
+			ModifiedOn:     "2021-06-10T12:38:04.627Z",
+			CreatedOn:      "2021-06-10T12:38:04.627Z",
 			Attributes: dto.AttributesResponseDto{
 				Country:                 "GB",
 				BaseCurrency:            "GBP",
@@ -52,7 +52,7 @@ func (s *FetchAccountTestSuite)TestShouldFetchAccountWhenAccountIsCreated() {
 		},
 	}
 
-	fetcherAdapter := fetcher.ProvideAccountFetcher2()
+	fetcherAdapter := fetcher.ProvideAccountFetcher()
 
 	// WHEN
 	err := fetcherAdapter.FetchAccount(accountID, &actualAccountResponse)
@@ -62,7 +62,7 @@ func (s *FetchAccountTestSuite)TestShouldFetchAccountWhenAccountIsCreated() {
 	assert.Equal(s.T(), expectedAccountResponse, actualAccountResponse)
 }
 
-func (s *FetchAccountTestSuite)TestShouldReturnErrorWhenMockAPIReturnError() {
+func (s *FetchAccountTestSuite) TestShouldReturnErrorWhenMockAPIReturnError() {
 	// GIVEN
 	if mockErr := s.setMockAccountAPIReturnError(); mockErr != nil {
 		s.Error(mockErr)
@@ -73,7 +73,7 @@ func (s *FetchAccountTestSuite)TestShouldReturnErrorWhenMockAPIReturnError() {
 
 	actualAccountResponse := dto.ResponseDto{}
 
-	fetcherAdapter := fetcher.ProvideAccountFetcher2()
+	fetcherAdapter := fetcher.ProvideAccountFetcher()
 
 	// WHEN
 	err := fetcherAdapter.FetchAccount(accountID, &actualAccountResponse)

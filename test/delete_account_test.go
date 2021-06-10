@@ -3,7 +3,7 @@ package test
 import (
 	"bytes"
 	"github.com/m3hm3t/account-client-api/internal/config"
-	"github.com/m3hm3t/account-client-api/internal/pkg/rest/adapter/account/deleter"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/deleter"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"net/http"
@@ -26,11 +26,10 @@ func (s *DeleteAccountTestSuite) TestShouldDeleteAccountWhenAccountIsCreated() {
 
 	config.AccountAPIURL = MockServerURL
 
-
 	accountID := "MockAccountID"
 	version := "0"
 
-	deleteAdapter := deleter.ProvideAccountDeleter2()
+	deleteAdapter := deleter.ProvideAccountDeleter()
 
 	expectedResponseStatus := http.StatusNoContent
 
