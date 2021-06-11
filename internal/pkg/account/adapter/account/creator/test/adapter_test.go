@@ -91,6 +91,7 @@ func TestShouldFetchAccountWhenAccountIsCreated(t *testing.T) {
 				BankID:                  "400300",
 				BankIDCode:              "GBDSC",
 				Name:                    []string{"Samantha Holder"},
+				BIC: "NWBKGB22",
 				AlternativeName:         []string{"Sam Holder"},
 				AccountClassification:   "Personal",
 				JointAccount:            false,

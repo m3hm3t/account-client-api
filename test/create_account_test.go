@@ -1,13 +1,11 @@
 package test
 
 import (
-	"bytes"
-	"github.com/m3hm3t/account-client-api/internal/config"
+	"github.com/google/uuid"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/creator"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"net/http"
 	"testing"
 )
 
@@ -20,17 +18,10 @@ func TestCreateAccountTestSuite(t *testing.T) {
 }
 
 func (s *CreateAccountTestSuite) TestShouldCreateAccountWhenMockAPIReturnSuccess() {
-
 	// Given
-	if mockErr := s.setMockAccountAPIReturnSuccess(); mockErr != nil {
-		s.Error(mockErr)
-	}
-
-	config.AccountAPIURL = MockServerURL
-
 	accountRequest := dto.RequestDto{
 		Data: dto.DataRequestDto{
-			ID:             "396a3a28-2247-4474-bfa0-ce214a66c07a",
+			ID:             uuid.NewString(),
 			Type:           "accounts",
 			OrganisationID: "496a3a28-2247-4474-bfa0-ce214a66c07b",
 			Attributes: dto.AttributesRequestDto{
@@ -50,28 +41,6 @@ func (s *CreateAccountTestSuite) TestShouldCreateAccountWhenMockAPIReturnSuccess
 	}
 
 	actualAccountResponse := dto.ResponseDto{}
-	expectedAccountResponse := dto.ResponseDto{
-		Data: dto.DataResponseDto{
-			ID:             "496a3a28-2247-4474-bfa0-ce214a66c07b",
-			Type:           "accounts",
-			OrganisationID: "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",
-			Version:        0,
-			ModifiedOn:     "2021-06-10T12:38:04.627Z",
-			CreatedOn:      "2021-06-10T12:38:04.627Z",
-			Attributes: dto.AttributesResponseDto{
-				Country:                 "GB",
-				BaseCurrency:            "GBP",
-				BankID:                  "400300",
-				BankIDCode:              "GBDSC",
-				Name:                    []string{"Samantha Holder"},
-				AlternativeName:         []string{"Sam Holder"},
-				AccountClassification:   "Personal",
-				JointAccount:            false,
-				AccountMatchingOptOut:   false,
-				SecondaryIdentification: "A1B2C3D4",
-			},
-		},
-	}
 
 	creatorAdapter := creator.ProvideAccountCreator()
 
@@ -80,21 +49,30 @@ func (s *CreateAccountTestSuite) TestShouldCreateAccountWhenMockAPIReturnSuccess
 
 	// Then
 	assert.Nil(s.T(), err)
-	assert.Equal(s.T(), expectedAccountResponse, actualAccountResponse)
+	assert.Equal(s.T(), accountRequest.Data.ID, actualAccountResponse.Data.ID)
+	assert.Equal(s.T(), accountRequest.Data.Type, actualAccountResponse.Data.Type)
+	assert.Equal(s.T(), accountRequest.Data.OrganisationID, actualAccountResponse.Data.OrganisationID)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.Country, actualAccountResponse.Data.Attributes.Country)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.BaseCurrency, actualAccountResponse.Data.Attributes.BaseCurrency)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.BankID, actualAccountResponse.Data.Attributes.BankID)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.BankIDCode, actualAccountResponse.Data.Attributes.BankIDCode)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.BIC, actualAccountResponse.Data.Attributes.BIC)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.Name, actualAccountResponse.Data.Attributes.Name)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.AlternativeName,
+		actualAccountResponse.Data.Attributes.AlternativeName)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.AccountClassification,
+		actualAccountResponse.Data.Attributes.AccountClassification)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.SecondaryIdentification,
+		actualAccountResponse.Data.Attributes.SecondaryIdentification)
+	assert.Equal(s.T(), accountRequest.Data.Attributes.JointAccount,
+		actualAccountResponse.Data.Attributes.JointAccount)
 }
 
-func (s *CreateAccountTestSuite) TestShouldReturnErrorWhenMockAPIReturnErrorMessage() {
-
+func (s *CreateAccountTestSuite) TestShouldReturnErrorWhenAccountIDInvalid() {
 	// Given
-	if mockErr := s.setMockAccountAPIReturnError(); mockErr != nil {
-		s.Error(mockErr)
-	}
-
-	config.AccountAPIURL = MockServerURL
-
 	accountRequest := dto.RequestDto{
 		Data: dto.DataRequestDto{
-			ID:             "396a3a28-2247-4474-bfa0-ce214a66c07a",
+			ID:             "InvalidAccountID",
 			Type:           "accounts",
 			OrganisationID: "496a3a28-2247-4474-bfa0-ce214a66c07b",
 			Attributes: dto.AttributesRequestDto{
@@ -122,96 +100,41 @@ func (s *CreateAccountTestSuite) TestShouldReturnErrorWhenMockAPIReturnErrorMess
 
 	// Then
 	assert.NotNil(s.T(), err)
+	assert.Contains(s.T(), err.Error(), "error_message")
 	assert.Empty(s.T(), actualAccountResponse)
 }
 
-func (s *CreateAccountTestSuite) setMockAccountAPIReturnSuccess() error {
-	client := &http.Client{}
-
-	body := `{
-				"httpRequest": {
-					"method": "POST"
-				},
-				"httpResponse": {
-					"statusCode": 201,
-					"body": {
-						"data": {
-							"attributes": {
-								"account_classification": "Personal",
-								"account_matching_opt_out": false,
-								"alternative_names": [
-									"Sam Holder"
-								],
-								"bank_id": "400300",
-								"bank_id_code": "GBDSC",
-								"base_currency": "GBP",
-								"bic": "NWBKGB22",
-								"country": "GB",
-								"joint_account": false,
-								"name": [
-									"Samantha Holder"
-								],
-								"secondary_identification": "A1B2C3D4"
-							},
-							"created_on": "2021-06-10T12:38:04.627Z",
-							"id": "496a3a28-2247-4474-bfa0-ce214a66c07b",
-							"modified_on": "2021-06-10T12:38:04.627Z",
-							"organisation_id": "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",
-							"type": "accounts",
-							"version": 0
-						},
-						"links": {
-							"self": "/v1/organisation/accounts/496a3a28-2247-4474-bfa0-ce214a66c07b"
-						}
-					}
-				},
-				"times": {
-					"unlimited": false,
-					"remainingTimes" : 1
-					}
-				}`
-
-	req, err := http.NewRequest(http.MethodPut, MockServerURL, bytes.NewBuffer([]byte(body)))
-	if err != nil {
-		return err
+func (s *CreateAccountTestSuite) TestShouldReturnErrorWhenCountryMissing() {
+	// Given
+	accountRequest := dto.RequestDto{
+		Data: dto.DataRequestDto{
+			ID:             uuid.NewString(),
+			Type:           "accounts",
+			OrganisationID: "496a3a28-2247-4474-bfa0-ce214a66c07b",
+			Attributes: dto.AttributesRequestDto{
+				BaseCurrency:            "GBP",
+				BankID:                  "400300",
+				BankIDCode:              "GBDSC",
+				BIC:                     "NWBKGB22",
+				Name:                    []string{"Samantha Holder"},
+				AlternativeName:         []string{"Sam Holder"},
+				AccountClassification:   "Personal",
+				JointAccount:            false,
+				AccountMatchingOptOut:   false,
+				SecondaryIdentification: "A1B2C3D4",
+			},
+		},
 	}
 
-	_, err = client.Do(req)
-	if err != nil {
-		return err
-	}
+	actualAccountResponse := dto.ResponseDto{}
 
-	return nil
-}
+	creatorAdapter := creator.ProvideAccountCreator()
 
-func (s *CreateAccountTestSuite) setMockAccountAPIReturnError() error {
-	client := &http.Client{}
+	// When
+	err := creatorAdapter.CreateAccount(accountRequest, &actualAccountResponse)
 
-	body := `{
-				"httpRequest": {
-					"method": "POST"
-				},
-				"httpResponse": {
-					"statusCode": 400,
-					"body": {
-						"error_message": "validation failure list:\nvalidation failure list:\nid in body must be of type uuid: \"496a3a28-2247-4474-bfa0-ce214a66c07aa\""
-					}
-				},
-				"times": {
-					"unlimited": false,
-					"remainingTimes" : 1
-					}
-				}`
-
-	req, err := http.NewRequest(http.MethodPut, MockServerURL, bytes.NewBuffer([]byte(body)))
-	if err != nil {
-		return err
-	}
-
-	_, err = client.Do(req)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	// Then
+	assert.NotNil(s.T(), err)
+	assert.Contains(s.T(), err.Error(), "error_message")
+	assert.Empty(s.T(), actualAccountResponse)
 }

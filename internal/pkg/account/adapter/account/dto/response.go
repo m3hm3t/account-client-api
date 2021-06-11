@@ -20,6 +20,7 @@ type AttributesResponseDto struct {
 	BaseCurrency            string   `json:"base_currency"`
 	BankID                  string   `json:"bank_id"`
 	BankIDCode              string   `json:"bank_id_code"`
+	BIC                     string   `json:"bic"`
 	AccountNumber           string   `json:"account_number"`
 	IBAN                    string   `json:"iban"`
 	Name                    []string `json:"name"`

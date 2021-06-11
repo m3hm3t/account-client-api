@@ -1,15 +1,6 @@
-MOCK_SERVER_ADDRESS=localhost:1080
-MOCK_SERVER_RESET_URL=http://$(MOCK_SERVER_ADDRESS)/mockserver/reset
-unit-test:
-	 go test ./internal/... -coverpkg=./internal/...  -covermode=atomic -coverprofile coverage.out; \
- 	 go tool cover -func coverage.out | grep total; \
- 	 rm -r coverage.out
-
-.PHONY: unit-test
-
 test:
-	@docker-compose -f docker-compose.yml up -d
-	@sleep 1 && \
+	@docker-compose -f docker-compose.yml up --build -d
+	@sleep 7 && \
 	go test ./... -coverpkg=./internal/...  -covermode=atomic -coverprofile coverage.out;\
 	go tool cover -func coverage.out | grep total; \
     rm -r coverage.out

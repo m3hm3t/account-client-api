@@ -1,8 +1,7 @@
 package test
 
 import (
-	"bytes"
-	"github.com/m3hm3t/account-client-api/internal/config"
+	"github.com/google/uuid"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/deleter"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -18,20 +17,14 @@ func TestDeleteAccountTestSuite(t *testing.T) {
 	suite.Run(t, new(DeleteAccountTestSuite))
 }
 
-func (s *DeleteAccountTestSuite) TestShouldDeleteAccountWhenAccountIsCreated() {
+func (s *DeleteAccountTestSuite) TestShouldReturnErrorWhenAccountIDInvalid() {
 	// GIVEN
-	if mockErr := s.setMockAccountAPIReturnSuccess(); mockErr != nil {
-		s.Error(mockErr)
-	}
-
-	config.AccountAPIURL = MockServerURL
-
-	accountID := "MockAccountID"
+	accountID := "InvalidAccountID"
 	version := "0"
 
 	deleteAdapter := deleter.ProvideAccountDeleter()
 
-	expectedResponseStatus := http.StatusNoContent
+	expectedResponseStatus := http.StatusBadRequest
 
 	// WHEN
 
@@ -42,33 +35,38 @@ func (s *DeleteAccountTestSuite) TestShouldDeleteAccountWhenAccountIsCreated() {
 	assert.Equal(s.T(), expectedResponseStatus, actualResponseStatus)
 }
 
-func (s *DeleteAccountTestSuite) setMockAccountAPIReturnSuccess() error {
-	client := &http.Client{}
+func (s *DeleteAccountTestSuite) TestShouldReturnErrorWhenAccountNotExisting() {
+	// GIVEN
+	accountID := uuid.NewString()
+	version := "0"
 
-	body := `{
-				"httpRequest": {
-					"method": "DELETE"
-				},
-				"httpResponse": {
-					"statusCode": 204,
-					"body": {
-					}
-				},
-				"times": {
-					"unlimited": false,
-					"remainingTimes" : 1
-					}
-				}`
+	deleteAdapter := deleter.ProvideAccountDeleter()
 
-	req, err := http.NewRequest(http.MethodPut, MockServerURL, bytes.NewBuffer([]byte(body)))
-	if err != nil {
-		return err
-	}
+	expectedResponseStatus := http.StatusNotFound
 
-	_, err = client.Do(req)
-	if err != nil {
-		return err
-	}
+	// WHEN
 
-	return nil
+	actualResponseStatus, err := deleteAdapter.DeleteAccount(accountID, version)
+
+	// THEN
+	assert.Nil(s.T(), err)
+	assert.Equal(s.T(), expectedResponseStatus, actualResponseStatus)
+}
+
+func (s *DeleteAccountTestSuite) TestShouldReturnErrorWhenVersionInvalid() {
+	// GIVEN
+	accountID := "InvalidAccountID"
+	version := "a"
+
+	deleteAdapter := deleter.ProvideAccountDeleter()
+
+	expectedResponseStatus := http.StatusBadRequest
+
+	// WHEN
+
+	actualResponseStatus, err := deleteAdapter.DeleteAccount(accountID, version)
+
+	// THEN
+	assert.Nil(s.T(), err)
+	assert.Equal(s.T(), expectedResponseStatus, actualResponseStatus)
 }

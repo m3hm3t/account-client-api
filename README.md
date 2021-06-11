@@ -10,14 +10,6 @@ The library contains both unit and integration tests. A mock rest API is used to
 
 ## Tests
 
-Unit Test run command
-
-    make unit-test
-
 Unit and Integration Test run command
 
     make test
-
-Mock Server reset for integration test
-
-    make reset-mock
