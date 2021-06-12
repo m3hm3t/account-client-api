@@ -3,13 +3,13 @@
 package main
 
 import (
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/deleter"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/delete"
 	"log"
 )
 
 func main() {
 
-	deleterAdapter := deleter.ProvideAccountDeleter()
+	deleterAdapter := delete.ProvideAccountDeleter()
 
 	deleteResponseStatus, err := deleterAdapter.DeleteAccount("a", "1")
 	if err != nil {

@@ -5,13 +5,13 @@ package main
 import (
 	"github.com/google/uuid"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetcher"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetch"
 	"log"
 )
 
 func main() {
 
-	fetcherAdapter := fetcher.ProvideAccountFetcher()
+	fetcherAdapter := fetch.ProvideAccountFetcher()
 
 	accountResponse := dto.ResponseDto{}
 

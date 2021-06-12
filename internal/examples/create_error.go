@@ -4,14 +4,14 @@ package main
 
 import (
 	"github.com/google/uuid"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/creator"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/create"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
 	"log"
 )
 
 func main() {
 
-	creatorAdapter := creator.ProvideAccountCreator()
+	creatorAdapter := create.ProvideAccountCreator()
 
 	accountResponse := dto.ResponseDto{}
 

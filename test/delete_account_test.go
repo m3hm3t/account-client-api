@@ -2,7 +2,7 @@ package test
 
 import (
 	"github.com/google/uuid"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/deleter"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/delete"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"net/http"
@@ -22,7 +22,7 @@ func (s *DeleteAccountTestSuite) TestShouldReturnErrorWhenAccountIDInvalid() {
 	accountID := "InvalidAccountID"
 	version := "0"
 
-	deleteAdapter := deleter.ProvideAccountDeleter()
+	deleteAdapter := delete.ProvideAccountDeleter()
 
 	expectedResponseStatus := http.StatusBadRequest
 
@@ -40,7 +40,7 @@ func (s *DeleteAccountTestSuite) TestShouldReturnErrorWhenAccountNotExisting() {
 	accountID := uuid.NewString()
 	version := "0"
 
-	deleteAdapter := deleter.ProvideAccountDeleter()
+	deleteAdapter := delete.ProvideAccountDeleter()
 
 	expectedResponseStatus := http.StatusNotFound
 
@@ -58,7 +58,7 @@ func (s *DeleteAccountTestSuite) TestShouldReturnErrorWhenVersionInvalid() {
 	accountID := "InvalidAccountID"
 	version := "a"
 
-	deleteAdapter := deleter.ProvideAccountDeleter()
+	deleteAdapter := delete.ProvideAccountDeleter()
 
 	expectedResponseStatus := http.StatusBadRequest
 

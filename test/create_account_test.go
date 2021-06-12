@@ -2,7 +2,7 @@ package test
 
 import (
 	"github.com/google/uuid"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/creator"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/create"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -42,7 +42,7 @@ func (s *CreateAccountTestSuite) TestShouldCreateAccountWhenMockAPIReturnSuccess
 
 	actualAccountResponse := dto.ResponseDto{}
 
-	creatorAdapter := creator.ProvideAccountCreator()
+	creatorAdapter := create.ProvideAccountCreator()
 
 	// When
 	err := creatorAdapter.CreateAccount(accountRequest, &actualAccountResponse)
@@ -93,7 +93,7 @@ func (s *CreateAccountTestSuite) TestShouldReturnErrorWhenAccountIDInvalid() {
 
 	actualAccountResponse := dto.ResponseDto{}
 
-	creatorAdapter := creator.ProvideAccountCreator()
+	creatorAdapter := create.ProvideAccountCreator()
 
 	// When
 	err := creatorAdapter.CreateAccount(accountRequest, &actualAccountResponse)
@@ -128,7 +128,7 @@ func (s *CreateAccountTestSuite) TestShouldReturnErrorWhenCountryMissing() {
 
 	actualAccountResponse := dto.ResponseDto{}
 
-	creatorAdapter := creator.ProvideAccountCreator()
+	creatorAdapter := create.ProvideAccountCreator()
 
 	// When
 	err := creatorAdapter.CreateAccount(accountRequest, &actualAccountResponse)

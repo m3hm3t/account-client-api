@@ -6,19 +6,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/creator"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/deleter"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/create"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/delete"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetcher"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetch"
 	"log"
 	"strconv"
 )
 
 func main() {
 
-	creatorAdapter := creator.ProvideAccountCreator()
-	fetcherAdapter := fetcher.ProvideAccountFetcher()
-	deleterAdapter := deleter.ProvideAccountDeleter()
+	creatorAdapter := create.ProvideAccountCreator()
+	fetcherAdapter := fetch.ProvideAccountFetcher()
+	deleterAdapter := delete.ProvideAccountDeleter()
 
 	accountResponse := dto.ResponseDto{}
 

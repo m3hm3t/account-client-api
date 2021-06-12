@@ -2,10 +2,10 @@ package test
 
 import (
 	"github.com/google/uuid"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/creator"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/deleter"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/create"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/delete"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetcher"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetch"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"net/http"
@@ -46,9 +46,9 @@ func (s *CreateFetchDeleteAccountTestSuite) TestShouldCreateFetchDeleteAccountWh
 
 	actualAccountResponse := dto.ResponseDto{}
 
-	creatorAdapter := creator.ProvideAccountCreator()
-	fetcherAdapter := fetcher.ProvideAccountFetcher()
-	deleteAdapter := deleter.ProvideAccountDeleter()
+	creatorAdapter := create.ProvideAccountCreator()
+	fetcherAdapter := fetch.ProvideAccountFetcher()
+	deleteAdapter := delete.ProvideAccountDeleter()
 
 	// When
 	err := creatorAdapter.CreateAccount(accountRequest, &actualAccountResponse)

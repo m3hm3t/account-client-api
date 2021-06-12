@@ -3,7 +3,7 @@ package test
 import (
 	"github.com/google/uuid"
 	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/dto"
-	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetcher"
+	"github.com/m3hm3t/account-client-api/internal/pkg/account/adapter/account/fetch"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -23,7 +23,7 @@ func (s *FetchAccountTestSuite) TestShouldReturnErrorWhenAccountIDInvalid() {
 
 	actualAccountResponse := dto.ResponseDto{}
 
-	fetcherAdapter := fetcher.ProvideAccountFetcher()
+	fetcherAdapter := fetch.ProvideAccountFetcher()
 
 	// WHEN
 	err := fetcherAdapter.FetchAccount(accountID, &actualAccountResponse)
@@ -40,7 +40,7 @@ func (s *FetchAccountTestSuite) TestShouldReturnErrorWhenAccountNotCreated() {
 
 	actualAccountResponse := dto.ResponseDto{}
 
-	fetcherAdapter := fetcher.ProvideAccountFetcher()
+	fetcherAdapter := fetch.ProvideAccountFetcher()
 
 	// WHEN
 	err := fetcherAdapter.FetchAccount(accountID, &actualAccountResponse)
