@@ -9,12 +9,12 @@ import (
 )
 
 type RestGetterClient struct {
-	Client *http.Client
+	client *http.Client
 }
 
 func NewRestGetterClient(timeOutInMilliSec int64) RestGetter {
 	return &RestGetterClient{
-		Client: &http.Client{
+		client: &http.Client{
 			Timeout: time.Duration(timeOutInMilliSec) * time.Millisecond,
 		},
 	}
@@ -25,12 +25,12 @@ func (c *RestGetterClient) MakeGetRequest(url string) ([]byte, int, error) {
 
 	request, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return nil, http.StatusBadRequest, fmt.Errorf("request cannot be created: %w", err)
+		return nil, http.StatusBadRequest, fmt.Errorf("request cannot be fetch: %w", err)
 	}
 
 	request.Header.Add("Accept", `application/vnd.api+json`)
 
-	resp, err := c.Client.Do(request)
+	resp, err := c.client.Do(request)
 	if err != nil {
 		return nil, http.StatusBadRequest, fmt.Errorf("request is failed: %w", err)
 	}

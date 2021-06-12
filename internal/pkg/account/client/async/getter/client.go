@@ -1,4 +1,4 @@
-package getter_async
+package getter
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 )
 
 type RestGetterAsyncClient struct {
-	HTTPClient      *http.Client
+	client          *http.Client
 	ResponseChannel chan []byte
 	ErrorChannel    chan error
 }
@@ -18,7 +18,7 @@ func NewRestGetterAsyncClient(timeOutInMilliSec int64, bufferSize int) *RestGett
 	responseChannel := make(chan []byte, bufferSize)
 	errorChannel := make(chan error, bufferSize)
 	return &RestGetterAsyncClient{
-		HTTPClient:      &http.Client{
+		client: &http.Client{
 			Timeout: time.Duration(timeOutInMilliSec) * time.Millisecond,
 		},
 		ResponseChannel: responseChannel,
@@ -43,7 +43,7 @@ func (c *RestGetterAsyncClient) makeGetRequest(url string) {
 
 	request.Header.Add("Accept", `application/vnd.api+json`)
 
-	resp, err := c.HTTPClient.Do(request)
+	resp, err := c.client.Do(request)
 	if err != nil {
 		c.ErrorChannel <- fmt.Errorf("request is failed: %w", err)
 		return
